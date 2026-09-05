@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}Critical Values Database{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2><i class="bi bi-exclamation-triangle"></i> Critical Values Database</h2>
+        <p class="text-muted">Laboratory critical values and action requirements</p>
+    </div>
+</div>
+
+<!-- Search and Filter -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Search</label>
+                <input type="text" name="search" class="form-control" placeholder="Search analyte..." value="{{ search_query }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Department</label>
+                <select name="department" class="form-select">
+                    <option value="">All Departments</option>
+                    {% for dept_code, dept_name in departments %}
+                        <option value="{{ dept_code }}" {% if current_department == dept_code %}selected{% endif %}>
+                            {{ dept_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Filter
+                </button>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">&nbsp;</label>
+                <a href="{% url 'labhelper:critical_values' %}" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-x-circle"></i> Clear
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Values Table -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Analyte</th>
+                        <th>Critical Low</th>
+                        <th>Critical High</th>
+                        <th>Unit</th>
+                        <th>Department</th>
+                        <th>Action Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for value in values %}
+                        <tr>
+                            <td><strong>{{ value.analyte }}</strong></td>
+                            <td>
+                                {% if value.critical_low %}
+                                    <span class="text-danger">{{ value.critical_low }}</span>
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if value.critical_high %}
+                                    <span class="text-danger">{{ value.critical_high }}</span>
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ value.unit }}</td>
+                            <td><span class="badge bg-secondary">{{ value.get_department_display }}</span></td>
+                            <td>{{ value.action_required|truncatechars:30|default:"-" }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="bi bi-exclamation-triangle display-1 d-block"></i>
+                                <p class="mt-3">No critical values found.</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Reference Guide -->
+<div class="card mt-4 bg-light">
+    <div class="card-body">
+        <h6><i class="bi bi-info-circle"></i> Critical Value Guidelines</h6>
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="border rounded p-2 bg-white">
+                    <small class="text-muted">Critical Low</small>
+                    <h5 class="text-danger">Below threshold</h5>
+                    <small>Immediate action required</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-2 bg-white">
+                    <small class="text-muted">Critical High</small>
+                    <h5 class="text-danger">Above threshold</h5>
+                    <small>Immediate action required</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-2 bg-white">
+                    <small class="text-muted">Normal Range</small>
+                    <h5 class="text-success">Within limits</h5>
+                    <small>No action needed</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="border rounded p-2 bg-white">
+                    <small class="text-muted">Action</small>
+                    <h5 class="text-primary">Protocol</h5>
+                    <small>Follow specified procedure</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

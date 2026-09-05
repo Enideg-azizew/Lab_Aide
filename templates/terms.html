@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Terms of Service - MediLab{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-body p-5">
+                    <h1 class="display-5 fw-bold mb-4 text-primary">
+                        <i class="bi bi-file-text me-2"></i>Terms of Service
+                    </h1>
+                    <p class="text-muted mb-4">Last Updated: September 4, 2026</p>
+
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Educational Project Notice:</strong> This is a learning demonstration. No real medical services are being provided.
+                    </div>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">1. Acceptance of Terms</h2>
+                        <p>By using MediLab Clinical Laboratory Management System ("the Application"), you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use the application.</p>
+                        <p class="text-muted fst-italic">This is a <strong>learning project</strong> created by Enideg Azizew for educational purposes.</p>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">2. Description of Service</h2>
+                        <p>MediLab is a laboratory management system designed to demonstrate:</p>
+                        <ul>
+                            <li><strong>LabHelper:</strong> SOP management, critical value tracking, Levey-Jennings charts, and laboratory calculations</li>
+                            <li><strong>Inventory:</strong> Reagent management, stock tracking, and usage reporting</li>
+                            <li><strong>Patient Portal:</strong> Result viewing, data upload, and patient management features</li>
+                        </ul>
+                        <div class="bg-light p-3 rounded mt-2">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Purpose:</strong> This application is built with Django to showcase web development skills in laboratory management.
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">3. User Accounts</h2>
+                        <h6 class="h6">Account Responsibilities:</h6>
+                        <ul>
+                            <li>You are responsible for maintaining the confidentiality of your account credentials</li>
+                            <li>You agree to provide accurate and complete information during registration</li>
+                            <li>You are responsible for all activities that occur under your account</li>
+                            <li>You must be at least 18 years old to use this application</li>
+                        </ul>
+                        <div class="alert alert-info">
+                            <i class="bi bi-person-plus me-2"></i>
+                            <strong>Demo Accounts:</strong> For testing purposes, you can register with any email.
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">4. Use of Data</h2>
+                        <ul>
+                            <li><strong>Demo Data Only:</strong> All data entered is for demonstration and testing purposes</li>
+                            <li><strong>No Real Medical Information:</strong> You agree not to enter any real patient medical information</li>
+                            <li><strong>Educational Use:</strong> The data may be used to demonstrate the application's features</li>
+                            <li><strong>Data Deletion:</strong> We reserve the right to clear demo data at any time</li>
+                        </ul>
+                        <div class="bg-danger bg-opacity-10 p-3 rounded border border-danger">
+                            <i class="bi bi-exclamation-octagon text-danger me-2"></i>
+                            <strong class="text-danger">Warning:</strong> Do NOT upload real patient data, PHI (Protected Health Information), or sensitive personal information.
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">5. Acceptable Use Policy</h2>
+                        <p>You agree not to:</p>
+                        <ul>
+                            <li>Upload malicious code or attempt to compromise system security</li>
+                            <li>Use the application for any illegal purpose</li>
+                            <li>Attempt to bypass authentication or access unauthorized data</li>
+                            <li>Upload inappropriate or offensive content</li>
+                            <li>Attempt to overload or disrupt the service</li>
+                        </ul>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">6. Intellectual Property</h2>
+                        <ul>
+                            <li>The application code is owned by the developer</li>
+                            <li>Bootstrap, Font Awesome, and other libraries are used under their respective licenses</li>
+                            <li>You may not copy, modify, or redistribute the application without permission</li>
+                            <li>This is a <strong>learning project</strong> and not a commercial product</li>
+                        </ul>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">7. Limitation of Liability</h2>
+                        <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            <strong>Disclaimer:</strong> This application is provided "AS IS" for educational purposes. It is NOT for actual clinical use. The developer makes no warranties about the accuracy or reliability of any information or results produced by this application.
+                        </div>
+                        <ul>
+                            <li>No liability for any damages arising from use</li>
+                            <li>Not responsible for any decisions made based on demonstration data</li>
+                            <li>No warranty that the application will be error-free or uninterrupted</li>
+                        </ul>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">8. Changes to Terms</h2>
+                        <p>We reserve the right to update these terms at any time. Continued use of the application after changes constitutes acceptance of new terms.</p>
+                    </section>
+
+                    <section class="mb-4">
+                        <h2 class="h4 mb-3">9. Contact</h2>
+                        <p>For questions about these Terms of Service:</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-envelope me-2"></i> Email: lab@mediclinic.com</li>
+                            <li><i class="bi bi-telephone me-2"></i> Phone: +(2519) 36 71 18 12</li>
+                        </ul>
+                    </section>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="bi bi-house me-2"></i>Return Home
+                        </a>
+                        <a href="{% url 'privacy' %}" class="btn btn-outline-secondary ms-2">
+                            <i class="bi bi-shield-lock me-2"></i>Privacy Policy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

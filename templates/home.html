@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}MediLab Clinical Laboratory - Accurate Diagnostic Services{% endblock %}
+{% block meta_description %}MediLab Clinical Laboratory provides accurate, timely diagnostic services with ISO 15189 accreditation. SOP management, quality control, and patient results portal.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Home page specific styles - minimal and scoped */
+    .hero-section {
+        min-height: calc(100vh - 76px);
+        background: linear-gradient(135deg, #f8fafc 0%, #e8edf5 100%);
+        padding: 4rem 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-image {
+        max-width: 80%;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .stat-box {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .stat-box:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    .service-card {
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+        padding: 1.5rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        height: 100%;
+    }
+
+    .service-card:hover {
+        border-color: #0d6efd;
+        box-shadow: 0 8px 25px rgba(13, 110, 253, 0.1);
+        transform: translateY(-4px);
+    }
+
+    .service-card .icon-wrapper {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+    }
+
+    .text-purple { color: #6f42c1; }
+    .bg-purple { background-color: #6f42c1; }
+
+    @media (max-width: 768px) {
+        .hero-section { text-align: center; padding: 3rem 0; }
+        .hero-image { max-width: 100%; margin-top: 2rem; }
+        .display-4 { font-size: 2.5rem !important; }
+        .stat-box .display-4 { font-size: 2rem !important; }
+    }
+
+    @media (max-width: 576px) {
+        .navbar-brand span { display: none; }
+        .btn-lg { font-size: 0.9rem; padding: 10px 20px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-primary mb-3 px-3 py-2" style="font-size: 0.8rem;">
+                    <i class="bi bi-award me-2"></i>ISO 15189 Accredited
+                </span>
+                <h1 class="display-4 fw-bold mb-4" style="color: #1a3a5c;">
+                    Your Health, <br>Our Precision
+                </h1>
+                <p class="lead text-muted mb-4" style="font-size: 1.2rem;">
+                    MediLab provides accurate, timely, and comprehensive 
+                    diagnostic services for patients and healthcare providers.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{% url 'labhelper:dashboard' %}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-flask me-2"></i>Lab Dashboard
+                    </a>
+                    <a href="{% url 'labhelper:sop_list' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-book me-2"></i>View SOPs
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image-wrapper">
+                    <svg class="hero-image" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="300" height="200" rx="20" fill="#E8EDF5"/>
+                        <rect x="80" y="80" width="240" height="140" rx="12" fill="white" stroke="#0D6EFD" stroke-width="2"/>
+                        <circle cx="200" cy="150" r="40" fill="#0D6EFD" opacity="0.1"/>
+                        <circle cx="200" cy="150" r="25" fill="#0D6EFD" opacity="0.2"/>
+                        <circle cx="200" cy="150" r="12" fill="#0D6EFD"/>
+                        <path d="M140 110 L200 80 L260 110 L260 190 L200 220 L140 190 Z" stroke="#0D6EFD" stroke-width="2" fill="none"/>
+                        <path d="M170 140 L200 130 L230 140 L230 160 L200 170 L170 160 Z" fill="#0D6EFD" opacity="0.3"/>
+                        <rect x="120" y="200" width="160" height="8" rx="4" fill="#0D6EFD" opacity="0.2"/>
+                        <rect x="140" y="215" width="120" height="6" rx="3" fill="#0D6EFD" opacity="0.1"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="stat-box">
+                    <div class="display-4 fw-bold text-primary" data-count="2847">0</div>
+                    <div class="text-muted small">Tests This Month</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box">
+                    <div class="display-4 fw-bold text-success" data-count="1.2">0</div>
+                    <div class="text-muted small">Avg. Turnaround (h)</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box">
+                    <div class="display-4 fw-bold text-info" data-count="56">0</div>
+                    <div class="text-muted small">Active SOPs</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-box">
+                    <div class="display-4 fw-bold text-warning" data-count="78">0%</div>
+                    <div class="text-muted small">Patient Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section id="services" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: #1a3a5c;">Our Laboratory Services</h2>
+            <p class="text-muted">Comprehensive diagnostic solutions for every need</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="icon-wrapper bg-primary bg-opacity-10">
+                        <i class="bi bi-droplet text-primary fa-2x"></i>
+                    </div>
+                    <h5>Clinical Chemistry</h5>
+                    <p class="text-muted small">Comprehensive metabolic panels, lipid profiles, liver function tests, and more.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="icon-wrapper bg-danger bg-opacity-10">
+                        <i class="bi bi-droplet-half text-danger fa-2x"></i>
+                    </div>
+                    <h5>Hematology</h5>
+                    <p class="text-muted small">Complete blood counts, coagulation studies, blood smear reviews, and flow cytometry.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="icon-wrapper bg-success bg-opacity-10">
+                        <i class="bi bi-bug text-success fa-2x"></i>
+                    </div>
+                    <h5>Microbiology</h5>
+                    <p class="text-muted small">Bacterial cultures, antimicrobial susceptibility, PCR, and infectious disease serology.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="icon-wrapper bg-purple bg-opacity-10">
+                        <i class="bi bi-dna text-purple fa-2x"></i>
+                    </div>
+                    <h5>Molecular Diagnostics</h5>
+                    <p class="text-muted small">PCR, sequencing, and genetic testing for personalized medicine.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="icon-wrapper bg-info bg-opacity-10">
+                        <i class="bi bi-shield-plus text-info fa-2x"></i>
+                    </div>
+                    <h5>Immunology</h5>
+                    <p class="text-muted small">Autoimmune panels, allergy testing, and therapeutic drug monitoring.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="service-card">
+                    <div class="icon-wrapper bg-warning bg-opacity-10">
+                        <i class="bi bi-eyedropper text-warning fa-2x"></i>
+                    </div>
+                    <h5>Urinalysis</h5>
+                    <p class="text-muted small">Complete urinalysis, microscopic examination, and drug screening.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-3">Need to speak with a lab specialist?</h3>
+        <p class="mb-4 opacity-75">Our team is available 24/7 to answer your questions.</p>
+        <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="tel:+251936711812" class="btn btn-light btn-lg px-5">
+                <i class="bi bi-telephone me-2"></i>Call Us Now
+            </a>
+            <a href="mailto:lab@mediclinic.com" class="btn btn-outline-light btn-lg px-5">
+                <i class="bi bi-envelope me-2"></i>Email Us
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Announcements -->
+<section class="py-3 bg-white border-bottom">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-megaphone text-primary fa-lg flex-shrink-0"></i>
+            <div class="overflow-hidden">
+                <div class="d-inline-block" style="white-space: nowrap; animation: scroll 20s linear infinite;">
+                    <span class="text-muted small me-5">New: AI-powered diagnostic support now available</span>
+                    <span class="text-muted small me-5">ML-based inventory predictions launched</span>
+                    <span class="text-muted small me-5">Updated SOP library with 15 new protocols</span>
+                    <span class="text-muted small me-5">ISO 15189:2022 accreditation renewed</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes scroll {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate counters when they come into view
+    const counters = document.querySelectorAll('[data-count]');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const el = entry.target;
+                const target = el.dataset.count;
+                animateCounter(el, target);
+                observer.unobserve(el);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    counters.forEach(counter => observer.observe(counter));
+});
+
+function animateCounter(element, targetValue) {
+    const isPercentage = targetValue.includes('%');
+    let numericValue = parseFloat(targetValue.replace(/[^0-9.]/g, ''));
+    const suffix = targetValue.replace(/[0-9.]/g, '');
+    
+    if (isNaN(numericValue)) return;
+    
+    let current = 0;
+    const duration = 1500;
+    const steps = 60;
+    const increment = numericValue / steps;
+    let step = 0;
+    
+    const timer = setInterval(() => {
+        step++;
+        if (step >= steps) {
+            element.textContent = targetValue;
+            clearInterval(timer);
+            return;
+        }
+        
+        current += increment;
+        let displayValue;
+        
+        if (isPercentage) {
+            displayValue = Math.round(current) + '%';
+        } else if (Number.isInteger(numericValue)) {
+            displayValue = Math.round(current).toLocaleString();
+        } else {
+            displayValue = current.toFixed(1);
+        }
+        
+        element.textContent = displayValue;
+    }, duration / steps);
+}
+
+// Console greeting for developers
+console.log('%cMediLab Clinical Laboratory', 'font-size: 20px; font-weight: bold; color: #0d6efd;');
+console.log('%cBuilt by Enideg Azizew', 'font-size: 14px; color: #4a5568;');
+console.log('%cEmpowering healthcare through precision diagnostics', 'font-size: 12px; color: #6c757d;');
+</script>
+{% endblock %}

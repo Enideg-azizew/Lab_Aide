@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Privacy Policy - MediLab{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-body p-5">
+                    <h1 class="display-5 fw-bold mb-4 text-primary">
+                        <i class="bi bi-shield-lock me-2"></i>Privacy Policy
+                    </h1>
+                    <p class="text-muted mb-4">Last Updated: September 4, 2026</p>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Educational Notice:</strong> This is a learning project. No real patient data is being collected or stored.
+                    </div>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">1. Introduction</h2>
+                        <p>At MediLab Clinical Laboratory ("we", "our", "us"), we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our laboratory management system.</p>
+                        <p class="text-muted fst-italic">Note: This is a <strong>learning project</strong> created for educational purposes. All data entered is for demonstration only.</p>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">2. Information We Collect</h2>
+                        <p>In this educational demo, we may collect:</p>
+                        <ul>
+                            <li><strong>Account Information:</strong> Username, email address, and password (for demo accounts)</li>
+                            <li><strong>Demographic Data:</strong> Sample patient information for testing purposes</li>
+                            <li><strong>Usage Data:</strong> How you interact with the application features</li>
+                            <li><strong>Laboratory Data:</strong> Test results, SOPs, and inventory management data</li>
+                        </ul>
+                        <div class="bg-light p-3 rounded mt-2">
+                            <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                            <strong>Important:</strong> All data is stored locally in SQLite and reset periodically. Do not enter real patient information.
+                        </div>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">3. How We Use Your Information</h2>
+                        <p>We use the collected information for:</p>
+                        <ul>
+                            <li>Demonstrating laboratory management features</li>
+                            <li>Educational purposes and training</li>
+                            <li>Testing and improving the application</li>
+                            <li>Showcasing functionality like SOP management, inventory tracking, and result reporting</li>
+                        </ul>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">4. Data Security</h2>
+                        <p>We implement appropriate security measures to protect your information:</p>
+                        <ul>
+                            <li>Django's built-in security features</li>
+                            <li>Password hashing and encryption</li>
+                            <li>CSRF protection</li>
+                            <li>SQLite database with proper permissions</li>
+                        </ul>
+                        <p class="text-muted">However, as this is a learning project, we recommend not storing sensitive or real data.</p>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">5. Data Retention</h2>
+                        <p>Since this is a demo application:</p>
+                        <ul>
+                            <li>Data is retained until the database is reset</li>
+                            <li>No long-term storage of any information</li>
+                            <li>Database can be cleared at any time by administrators</li>
+                        </ul>
+                    </section>
+
+                    <section class="mb-5">
+                        <h2 class="h4 mb-3">6. Your Rights</h2>
+                        <p>For this learning project, you have the right to:</p>
+                        <ul>
+                            <li>Access your demo account data</li>
+                            <li>Delete your test data</li>
+                            <li>Request information about collected data</li>
+                            <li>Opt-out of the demonstration at any time</li>
+                        </ul>
+                    </section>
+
+                    <section class="mb-4">
+                        <h2 class="h4 mb-3">7. Contact Information</h2>
+                        <p>For questions about this Privacy Policy or the learning project:</p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-envelope me-2"></i> Email: lab@mediclinic.com</li>
+                            <li><i class="bi bi-telephone me-2"></i> Phone: +(2519) 36 71 18 12</li>
+                            <li><i class="bi bi-geo-alt me-2"></i> Address: 123 Addis Ababa, Mexico 200</li>
+                        </ul>
+                    </section>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="bi bi-house me-2"></i>Return Home
+                        </a>
+                        <a href="{% url 'terms' %}" class="btn btn-outline-secondary ms-2">
+                            <i class="bi bi-file-text me-2"></i>Terms of Service
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

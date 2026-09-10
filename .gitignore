@@ -2,7 +2,6 @@
 
 # Python
 __pycache__/
-*.py[cod]
 *$py.class
 *.so
 .Python
@@ -26,8 +25,6 @@ dmypy.json
 db.sqlite3
 db.sqlite3-journal
 /media/
-/staticfiles/
-/static/
 *.pot
 *.pyc
 local_settings.py
@@ -77,5 +74,3 @@ Desktop.ini
 *.pyc
 __pycache__/
 .DS_Store
-staticfiles/
-media/

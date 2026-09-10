@@ -78,6 +78,7 @@ class CriticalValueFormTest(TestCase):
     def test_critical_value_form_invalid_range(self):
         """Test low >= high is invalid."""
         form_data = {
+            'unit': 'mg/dl',
             'analyte': 'Glucose',
             'critical_low': 400,
             'critical_high': 40,
@@ -90,6 +91,7 @@ class CriticalValueFormTest(TestCase):
     def test_critical_value_form_missing_analyte(self):
         """Test missing analyte is invalid."""
         form_data = {
+            'unit': 'mg/dl',
             'critical_low': 40,
             'critical_high': 400,
             'department': 'CHEM'
@@ -102,6 +104,7 @@ class CriticalValueFormTest(TestCase):
         """Test optional low and high values."""
         form_data = {
             'analyte': 'Sodium',
+            'unit': 'mg/dl',
             'critical_low': None,
             'critical_high': 160,
             'department': 'CHEM'

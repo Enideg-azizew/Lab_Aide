@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}Test Results{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2><i class="bi bi-table"></i> Test Results</h2>
+        <p class="text-muted">View all your laboratory test results</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'patientportal:download_pdf' %}" class="btn btn-success">
+            <i class="bi bi-file-pdf"></i> Download PDF
+        </a>
+        <a href="{% url 'patientportal:dashboard' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Test Name</label>
+                <select name="test_name" class="form-select">
+                    <option value="">All Tests</option>
+                    {% for name in test_names %}
+                        <option value="{{ name }}" {% if selected_test == name %}selected{% endif %}>
+                            {{ name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="normal" {% if selected_status == 'normal' %}selected{% endif %}>Normal</option>
+                    <option value="abnormal" {% if selected_status == 'abnormal' %}selected{% endif %}>Abnormal</option>
+                    <option value="critical" {% if selected_status == 'critical' %}selected{% endif %}>Critical</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Start Date</label>
+                <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">End Date</label>
+                <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary flex-grow-1">
+                        <i class="bi bi-search"></i> Filter
+                    </button>
+                    <a href="{% url 'patientportal:results_detail' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle"></i> Clear
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Table -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Result</th>
+                        <th>Unit</th>
+                        <th>Normal Range</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in page_obj %}
+                        <tr class="{% if result.is_critical %}table-danger{% elif result.is_abnormal %}table-warning{% endif %}">
+                            <td><strong>{{ result.test_name }}</strong></td>
+                            <td>{{ result.result }}</td>
+                            <td>{{ result.unit }}</td>
+                            <td>{{ result.normal_range }}</td>
+                            <td>{{ result.date_performed|date:"M d, Y" }}</td>
+                            <td>
+                                {% if result.is_critical %}
+                                    <span class="badge bg-danger">Critical</span>
+                                {% elif result.is_abnormal %}
+                                    <span class="badge bg-warning">Abnormal</span>
+                                {% else %}
+                                    <span class="badge bg-success">Normal</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'patientportal:result_detail' result.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{% url 'patientportal:download_pdf_single' result.id %}" class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-file-pdf"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox display-1 d-block"></i>
+                                <p class="mt-3">No results found matching your criteria.</p>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_test %}&amp;test_name={{ selected_test|urlencode }}{% endif %}{% if selected_status %}&amp;status={{ selected_status|urlencode }}{% endif %}{% if start_date %}&amp;start_date={{ start_date|urlencode }}{% endif %}{% if end_date %}&amp;end_date={{ end_date|urlencode }}{% endif %}">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}{% if selected_test %}&amp;test_name={{ selected_test|urlencode }}{% endif %}{% if selected_status %}&amp;status={{ selected_status|urlencode }}{% endif %}{% if start_date %}&amp;start_date={{ start_date|urlencode }}{% endif %}{% if end_date %}&amp;end_date={{ end_date|urlencode }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_test %}&amp;test_name={{ selected_test|urlencode }}{% endif %}{% if selected_status %}&amp;status={{ selected_status|urlencode }}{% endif %}{% if start_date %}&amp;start_date={{ start_date|urlencode }}{% endif %}{% if end_date %}&amp;end_date={{ end_date|urlencode }}{% endif %}">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+
+<!-- Summary -->
+<div class="card mt-4 bg-light">
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-4">
+                <small class="text-muted">Total Results</small>
+                <h5>{{ page_obj.paginator.count }}</h5>
+            </div>
+            <div class="col-4">
+                <small class="text-muted">Abnormal</small>
+                <h5 class="text-warning">{{ abnormal_count|default:"0" }}</h5>
+            </div>
+            <div class="col-4">
+                <small class="text-muted">Critical</small>
+                <h5 class="text-danger">{{ critical_count|default:"0" }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

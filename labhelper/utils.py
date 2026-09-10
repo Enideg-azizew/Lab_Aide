@@ -92,7 +92,12 @@ class LJChartGenerator:
         ax.legend(loc='upper right', fontsize=8)
         
         # Add summary statistics
-        stats_text = f"n={len(self.values)}\nMean={np.mean(self.values):.2f}\nSD={np.std(self.values):.2f}\nCV={np.std(self.values)/np.mean(self.values)*100:.1f}%"
+        mean = float(np.mean(self.values))
+        sd = float(np.std(self.values, ddof=1)) if len(self.values) > 1 else 0.0
+        cv = (sd / mean * 100) if mean != 0 else 0.0
+        stats_text = f"n={len(self.values)}\nMean={mean:.2f}\nSD={sd:.2f}\nCV={cv:.1f}%" 
+
+        #stats_text = f"n={len(self.values)}\nMean={np.mean(self.values):.2f}\nSD={np.std(self.values):.2f}\nCV={np.std(self.values)/np.mean(self.values)*100:.1f}%"
         ax.text(0.02, 0.98, stats_text, transform=ax.transAxes, 
                 verticalalignment='top', fontsize=9,
                 bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))

@@ -112,8 +112,8 @@ def lj_chart(request):
                     stats = {
                         'n': len(values),
                         'mean': round(np.mean(values), 2),
-                        'sd': round(np.std(values), 2),
-                        'cv': round(np.std(values)/np.mean(values)*100, 1) if np.mean(values) != 0 else 0,
+                        'sd': round(np.std(values, ddof=1), 2),
+                        'cv': round(np.std(values, ddof=1)/np.mean(values)*100, 1) if np.mean(values) != 0 else 0,
                         'min': min(values),
                         'max': max(values),
                         'range': round(max(values) - min(values), 2),

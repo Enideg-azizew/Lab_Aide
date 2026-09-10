@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}{{ result.test_name }} - Detail{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2><i class="bi bi-clipboard-data"></i> {{ result.test_name }}</h2>
+        <p class="text-muted">Performed on {{ result.date_performed|date:"M d, Y g:i A" }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'patientportal:download_pdf_single' result.id %}" class="btn btn-success">
+            <i class="bi bi-file-pdf"></i> Download PDF
+        </a>
+        <a href="{% url 'patientportal:results_detail' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> All Results
+        </a>
+    </div>
+</div>
+
+{% if result.is_critical %}
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle"></i> <strong>Critical value.</strong>
+        Please contact your healthcare provider as soon as possible to discuss this result.
+    </div>
+{% elif result.is_abnormal %}
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-circle"></i> This result falls outside the normal range.
+    </div>
+{% endif %}
+
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <small class="text-muted d-block">Result</small>
+                <h3>{{ result.result }} {{ result.unit }}</h3>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block">Normal Range</small>
+                <h5>{{ result.normal_range }} {{ result.unit }}</h5>
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block">Status</small>
+                {% if result.is_critical %}
+                    <h5><span class="badge bg-danger">Critical</span></h5>
+                {% elif result.is_abnormal %}
+                    <h5><span class="badge bg-warning">Abnormal</span></h5>
+                {% else %}
+                    <h5><span class="badge bg-success">Normal</span></h5>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <small class="text-muted d-block">Uploaded</small>
+                <h5>{{ result.date_uploaded|date:"M d, Y" }}</h5>
+            </div>
+        </div>
+        {% if result.notes %}
+            <hr>
+            <p class="mb-0"><strong>Notes:</strong> {{ result.notes }}</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if ai_summary %}
+    <div class="card mb-4">
+        <div class="card-header bg-light"><i class="bi bi-stars"></i> Summary</div>
+        <div class="card-body">{{ ai_summary }}</div>
+    </div>
+{% endif %}
+
+{% if similar_tests|length > 1 %}
+    <div class="card">
+        <div class="card-header bg-light">
+            <i class="bi bi-graph-up"></i> {{ result.test_name }} History
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Result</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in similar_tests %}
+                            <tr class="{% if t.id == result.id %}table-active{% endif %}">
+                                <td>{{ t.date_performed|date:"M d, Y" }}</td>
+                                <td>{{ t.result }} {{ t.unit }}</td>
+                                <td>
+                                    {% if t.is_critical %}
+                                        <span class="badge bg-danger">Critical</span>
+                                    {% elif t.is_abnormal %}
+                                        <span class="badge bg-warning">Abnormal</span>
+                                    {% else %}
+                                        <span class="badge bg-success">Normal</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<p class="text-muted small mt-4">
+    This information is for reference only and is not a substitute for professional medical advice.
+    Please consult your healthcare provider to interpret these results.
+</p>
+{% endblock %}

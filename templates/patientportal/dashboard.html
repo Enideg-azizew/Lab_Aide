@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2><i class="bi bi-person-circle"></i> Welcome, {{ patient.name }}</h2>
+        <p class="text-muted">Patient ID: {{ patient.patient_id }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'patientportal:download_pdf' %}" class="btn btn-success">
+            <i class="bi bi-file-pdf"></i> Download All PDF
+        </a>
+        <a href="{% url 'patientportal:logout' %}" class="btn btn-outline-danger">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </div>
+</div>
+
+<!-- Alerts -->
+{% if critical_alerts %}
+    <div class="alert alert-danger">
+        <h5><i class="bi bi-exclamation-triangle"></i> Critical Alerts</h5>
+        <ul class="mb-0">
+            {% for result in critical_alerts %}
+                <li>
+                    <strong>{{ result.test_name }}</strong>: {{ result.result }} {{ result.unit }}
+                    (Normal: {{ result.normal_range }}) - Performed on {{ result.date_performed|date:"M d, Y" }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<!-- Stats -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h6 class="card-title">Total Results</h6>
+                <h2 class="display-4">{{ total_results }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <h6 class="card-title">Abnormal Results</h6>
+                <h2 class="display-4">{{ abnormal_results }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h6 class="card-title">Critical Values</h6>
+                <h2 class="display-4">{{ critical_results }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h6 class="card-title">Recent Results (30d)</h6>
+                <h2 class="display-4">{{ recent_results_count }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Results -->
+<div class="card">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-table"></i> Latest Results</h5>
+        <a href="{% url 'patientportal:results_detail' %}" class="btn btn-sm btn-outline-primary">
+            View All <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Test</th>
+                        <th>Result</th>
+                        <th>Normal Range</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in latest_results %}
+                        <tr>
+                            <td>{{ result.test_name }}</td>
+                            <td>{{ result.result }} {{ result.unit }}</td>
+                            <td>{{ result.normal_range }}</td>
+                            <td>{{ result.date_performed|date:"M d, Y" }}</td>
+                            <td>
+                                {% if result.is_critical %}
+                                    <span class="badge bg-danger">Critical</span>
+                                {% elif result.is_abnormal %}
+                                    <span class="badge bg-warning">Abnormal</span>
+                                {% else %}
+                                    <span class="badge bg-success">Normal</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'patientportal:result_detail' result.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox display-1 d-block"></i>
+                                No results available yet.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

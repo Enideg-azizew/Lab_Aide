@@ -1,0 +1,30 @@
+# LIMS - Laboratory System
+
+As a medical laboratory student i have observed so many issues during my clinical trianings across diffrent health institutions,
+1. was patient results lose
+2. another was time consuming lookups & calculations (qc lj-charts, ref-rangess, sops)
+so i combined this into Django web app for managing lab operations: patients, test results, quality control, and latter added 
+3. reagent inventory system.
+
+## Features
+- Patient portal with PIN access
+- Test results with abnormal/critical alerts
+- QC charts with Westgard Rules
+- Reagent inventory with stock alerts
+- AI demand forecasting (Random Forest)
+
+## Tech
+Django · SQLite · Bootstrap · Chart.js · scikit-learn
+
+## Quick Start
+```bash
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+
+You can also play tests
+Status
+
+🟢 Active development – currently fixing bugs and improving features
+
+I'm pushing it farther for deployment readiness.

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Upload Results (Staff){% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-upload"></i> Bulk Upload Test Results</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Staff-only. Upload a CSV with columns: <code>patient_id, test_name, result,
+                    unit, normal_range, date_performed, notes</code>.
+                    <code>date_performed</code> should be <code>YYYY-MM-DD HH:MM</code>.
+                    <code>unit</code> and <code>notes</code> are optional.
+                </p>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-file-earmark-arrow-up"></i> Upload
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -28,7 +28,7 @@ class CriticalValueForm(forms.ModelForm):
         low = cleaned_data.get('critical_low')
         high = cleaned_data.get('critical_high')
         if low is not None and high is not None and low >= high:
-            raise ValidationError('Critical low must be less than critical high')
+            self.add_error('critical_low', 'Critical low must be less than critical high')
         return cleaned_data 
         
 

@@ -103,6 +103,17 @@
                             <i class="bi bi-grid"></i> Services
                         </a>
                     </li>
+                    <li class="nav-item">
+                        {% if request.session.patient_id %}
+                            <a class="nav-link" href="{% url 'patientportal:dashboard' %}">
+                                <i class="bi bi-clipboard2-pulse"></i> My Results
+                            </a>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'patientportal:login' %}">
+                                <i class="bi bi-clipboard2-pulse"></i> Patient Portal
+                            </a>
+                        {% endif %}
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
@@ -192,6 +203,7 @@
                         <li><a href="{% url 'labhelper:sop_list' %}" class="text-white-50 text-decoration-none">SOP Library</a></li>
                         <li><a href="{% url 'labhelper:lj_chart' %}" class="text-white-50 text-decoration-none">LJ Charts</a></li>
                         <li><a href="{% url 'labhelper:critical_values' %}" class="text-white-50 text-decoration-none">Critical Values</a></li>
+                        <li><a href="{% url 'patientportal:login' %}" class="text-white-50 text-decoration-none">Patient Portal</a></li>
                     </ul>
                 </div>
                 

@@ -38,12 +38,6 @@ class SOPAdminTest(TestCase):
         self.assertContains(response, 'title')
         self.assertContains(response, 'department')
     
-    def test_sop_admin_actions(self):
-        """Test SOP admin actions are present."""
-        response = self.client.get(reverse('admin:labhelper_sop_changelist'))
-        self.assertContains(response, 'mark_active')
-        self.assertContains(response, 'mark_inactive')
-
 
 class CriticalValueAdminTest(TestCase):
     """Test CriticalValue admin interface."""

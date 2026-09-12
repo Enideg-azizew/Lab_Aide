@@ -24,6 +24,7 @@ INSTALLED_APPS = [
 
     'labhelper',
     'patientportal',
+    'inventory',
 
     'crispy_forms',
     'crispy_bootstrap5',

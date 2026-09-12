@@ -98,6 +98,31 @@
                             </a></li>
                         </ul>
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-boxes"></i> Inventory
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'inventory:dashboard' %}">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'inventory:reagent_list' %}">
+                                <i class="bi bi-list-ul"></i> Reagent Inventory
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'inventory:reagent_add' %}">
+                                <i class="bi bi-plus-circle"></i> Add Reagent
+                            </a></li>
+                            <li><a class="dropdown-item" href="{% url 'inventory:usage_history' %}">
+                                <i class="bi bi-clock-history"></i> Usage History
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'inventory:export_report' %}">
+                                <i class="bi bi-file-pdf"></i> Export Report
+                            </a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}#services">
                             <i class="bi bi-grid"></i> Services
@@ -203,6 +228,7 @@
                         <li><a href="{% url 'labhelper:sop_list' %}" class="text-white-50 text-decoration-none">SOP Library</a></li>
                         <li><a href="{% url 'labhelper:lj_chart' %}" class="text-white-50 text-decoration-none">LJ Charts</a></li>
                         <li><a href="{% url 'labhelper:critical_values' %}" class="text-white-50 text-decoration-none">Critical Values</a></li>
+                        <li><a href="{% url 'inventory:reagent_list' %}" class="text-white-50 text-decoration-none">Reagent Inventory</a></li>
                         <li><a href="{% url 'patientportal:login' %}" class="text-white-50 text-decoration-none">Patient Portal</a></li>
                     </ul>
                 </div>

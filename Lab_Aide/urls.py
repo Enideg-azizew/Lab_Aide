@@ -27,7 +27,8 @@ urlpatterns = [
     path('terms/', terms, name='terms'),
     path('privacy/', privacy, name='privacy'),
     path('labhelper/', include('labhelper.urls')),
-    path('patientportal/', include('patientportal.urls')),    
+    path('patientportal/', include('patientportal.urls')),
+    path('inventory/', include("inventory.urls")),
 ]
  
 if settings.DEBUG:

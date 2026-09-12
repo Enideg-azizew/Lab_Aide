@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{% if reagent %}Edit Reagent{% else %}Add Reagent{% endif %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-{% if reagent %}pencil-square{% else %}plus-circle{% endif %}"></i>
+                    {% if reagent %}Edit Reagent{% else %}Add New Reagent{% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            {{ form.name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.category|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.manufacturer|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.catalog_number|as_crispy_field }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form.lot_number|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            {{ form.quantity|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.minimum_quantity|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.unit|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.expiry_date|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.location|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    {{ form.notes|as_crispy_field }}
+                    
+                    <hr>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> {% if reagent %}Update{% else %}Create{% endif %} Reagent
+                        </button>
+                        <a href="{% url 'inventory:reagent_list' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        {% if reagent %}
+            <div class="card mt-4 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-trash"></i> Danger Zone</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">This action cannot be undone. All usage history will also be deleted.</p>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="bi bi-trash"></i> Delete Reagent
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title"><i class="bi bi-exclamation-triangle"></i> Confirm Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete <strong>{{ reagent.name }}</strong>?</p>
+                            <p class="text-muted">This will also delete all associated usage history.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <form method="post" action="{% url 'inventory:reagent_delete' reagent.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Auto-calculate expiry date warning
+document.addEventListener('DOMContentLoaded', function() {
+    const expiryInput = document.querySelector('#id_expiry_date');
+    if (expiryInput) {
+        expiryInput.addEventListener('change', function() {
+            const expiryDate = new Date(this.value);
+            const today = new Date();
+            const daysDiff = Math.ceil((expiryDate - today) / (1000 * 60 * 60 * 24));
+            
+            if (daysDiff < 0) {
+                this.classList.add('is-invalid');
+                this.setCustomValidity('Expiry date is in the past');
+            } else if (daysDiff < 30) {
+                this.classList.add('is-warning');
+                this.setCustomValidity('');
+            } else {
+                this.classList.remove('is-invalid', 'is-warning');
+                this.setCustomValidity('');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

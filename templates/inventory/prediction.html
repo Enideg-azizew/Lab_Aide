@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% block title %}Usage Prediction - {{ reagent.name }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2><i class="bi bi-graph-up-arrow"></i> Usage Prediction</h2>
+        <p class="text-muted">AI-powered forecast for {{ reagent.name }}</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'inventory:reagent_detail' reagent.id %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Reagent
+        </a>
+    </div>
+</div>
+
+<!-- Prediction Summary -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h6 class="card-title">Predicted Usage (30 days)</h6>
+                <h2 class="display-4">{{ prediction.total_predicted|floatformat:1 }}</h2>
+                <span>{{ reagent.unit }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h6 class="card-title">Average Daily</h6>
+                <h2 class="display-4">{{ prediction.avg_daily|floatformat:2 }}</h2>
+                <span>{{ reagent.unit }}/day</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h6 class="card-title">Weekly Average</h6>
+                <h2 class="display-4">{{ prediction.weekly_avg|floatformat:1 }}</h2>
+                <span>{{ reagent.unit }}/week</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card {% if prediction.confidence > 0.8 %}bg-success{% elif prediction.confidence > 0.6 %}bg-warning{% else %}bg-danger{% endif %} text-white">
+            <div class="card-body text-center">
+                <h6 class="card-title">Confidence Score</h6>
+                <h2 class="display-4">{{ prediction.confidence_pct|floatformat:0 }}%</h2>
+                <span>Model accuracy</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Current vs Predicted -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-box"></i> Current Inventory</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <small class="text-muted">Current Quantity</small>
+                        <h3>{{ reagent.quantity }} {{ reagent.unit }}</h3>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">Minimum Required</small>
+                        <h3>{{ reagent.minimum_quantity }} {{ reagent.unit }}</h3>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <small class="text-muted">Days until stockout (estimated)</small>
+                    <h4>
+                        {% if prediction.days_until_stockout is not None %}
+                            {{ prediction.days_until_stockout|floatformat:0 }} days
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0"><i class="bi bi-clipboard-check"></i> Reorder Recommendations</h5>
+            </div>
+            <div class="card-body">
+                {% if reagent.quantity < prediction.total_predicted %}
+                    <div class="alert alert-danger">
+                        <h6><i class="bi bi-exclamation-triangle"></i> Reorder Required!</h6>
+                        <p class="mb-0">
+                            Current stock ({{ reagent.quantity }} {{ reagent.unit }}) is insufficient for 
+                            predicted 30-day usage ({{ prediction.total_predicted|floatformat:1 }} {{ reagent.unit }}).
+                        </p>
+                        <hr>
+                        <strong>Recommended Order:</strong>
+                        {{ prediction.recommended_order|floatformat:0 }} {{ reagent.unit }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-success">
+                        <h6><i class="bi bi-check-circle"></i> Stock Sufficient</h6>
+                        <p class="mb-0">
+                            Current stock ({{ reagent.quantity }} {{ reagent.unit }}) is sufficient for 
+                            predicted 30-day usage ({{ prediction.total_predicted|floatformat:1 }} {{ reagent.unit }}).
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Prediction Chart -->
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-graph-up"></i> Daily Usage Forecast</h5>
+    </div>
+    <div class="card-body">
+        <div class="chart-container" style="height: 300px;">
+            <canvas id="predictionChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Model Details -->
+<div class="card">
+    <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-robot"></i> Model Details</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-6">Algorithm</dt>
+                    <dd class="col-sm-6">Random Forest Regressor</dd>
+                    
+                    <dt class="col-sm-6">Training Data Points</dt>
+                    <dd class="col-sm-6">{{ prediction.predictions|length }} days</dd>
+                    
+                    <dt class="col-sm-6">Features Used</dt>
+                    <dd class="col-sm-6">Day of week, Month, Lag features, Rolling stats</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="row">
+                    <dt class="col-sm-6">Prediction Horizon</dt>
+                    <dd class="col-sm-6">30 days</dd>
+                    
+                    <dt class="col-sm-6">Model Status</dt>
+                    <dd class="col-sm-6">
+                        <span class="badge bg-success">Active</span>
+                    </dd>
+                    
+                    <dt class="col-sm-6">Last Trained</dt>
+                    <dd class="col-sm-6">{% now "M d, Y H:i" %}</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="alert alert-info mt-3">
+            <i class="bi bi-info-circle"></i>
+            The model retrains automatically when new usage data is added. 
+            For best results, maintain at least 30 days of historical data.
+        </div>
+    </div>
+</div>
+
+{{ prediction.predictions|json_script:"predictions-data" }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Prediction Chart
+    const ctx = document.getElementById('predictionChart').getContext('2d');
+    const predictions = JSON.parse(document.getElementById('predictions-data').textContent);
+    const days = Array.from({length: predictions.length}, (_, i) => i + 1);
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: days.map(d => `Day ${d}`),
+            datasets: [{
+                label: 'Predicted Usage',
+                data: predictions,
+                borderColor: 'rgb(52, 152, 219)',
+                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 1,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.parsed.y.toFixed(2)} {{ reagent.unit }}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Usage ({{ reagent.unit }})'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Days from now'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

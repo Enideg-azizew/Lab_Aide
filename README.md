@@ -28,3 +28,22 @@ Status
 🟢 Active development – currently fixing bugs and improving features
 
 I'm pushing it farther for deployment readiness.
+
+ 
+
+### 📄 License
+
+MIT © Enideg Azizew
+
+---
+
+📞 Contact
+
+Enideg Azizew
+https://img.shields.io/badge/GitHub-Enideg--azizew-181717?logo=github
+https://img.shields.io/badge/LinkedIn-enidegazizew-0A66C2?logo=linkedin
+📧 indexazacc@gmail.com
+
+---
+
+⭐ Star this repo if you find it useful!

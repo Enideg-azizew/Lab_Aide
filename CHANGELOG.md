@@ -1,5 +1,10 @@
 # Changelog
 
+## [v1.2] - 2026-9-13
+### Added
+-simple  Lab Inventory management system
+-Basic stock prediction model
+
 ## [v1.1] - 2026-09-10
 ### Added
 - Patient Portal

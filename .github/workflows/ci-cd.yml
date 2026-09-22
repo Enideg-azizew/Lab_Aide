@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 env:
   PYTHON_VERSION: "3.12"
@@ -95,12 +95,12 @@ jobs:
         run: bandit -r labhelper patientportal Lab_Aide -ll
 
   # ------------------------------------------------------------------
-  # 4. Build & push Docker image (only on main, after all green)
+  # 4. Build & push Docker image (only on master, after all green)
   # ------------------------------------------------------------------
   build:
     name: Build & push image
     needs: [lint, test, security]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -139,12 +139,12 @@ jobs:
           cache-to: type=gha,mode=max
 
   # ------------------------------------------------------------------
-  # 5. Deploy (only on main, after build)
+  # 5. Deploy (only on master, after build)
   # ------------------------------------------------------------------
   deploy:
     name: Deploy to server
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment: production
 

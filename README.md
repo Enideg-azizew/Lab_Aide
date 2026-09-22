@@ -1,10 +1,10 @@
 # LIMS - Laboratory System
 
 As a medical laboratory student i have observed so many issues during my clinical trianings across diffrent health institutions,
-1. was patient results lose
-2. another was time consuming lookups & calculations (qc lj-charts, ref-rangess, sops)
+1. There was patient results lose
+2. another was time consuming lookups & calculations (qc lj-charts, ref-rangess, sops) for some tests
 so i combined this into Django web app for managing lab operations: patients, test results, quality control, and latter added 
-3. reagent inventory system.
+3. no track of inventory so added reagent inventory system.
 
 ## Features
 - Patient portal with PIN access
@@ -27,7 +27,7 @@ Status
 
 🟢 Active development – currently fixing bugs and improving features
 
-I'm pushing it farther for deployment readiness.
+I'm pushing it further for deployment readiness.
 
  
 
